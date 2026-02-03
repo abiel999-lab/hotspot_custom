@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="refresh" content="2; url=$(link-orig)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+
+  <title>Impact WiFi | Advertisement</title>
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { overflow: hidden; }
+
+    .bg { position: fixed; inset: 0; z-index: 0; background: #0b1220; }
+    .bg video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.82); }
+    .bg::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.10), rgba(0,0,0,0.60));
+      pointer-events: none;
+    }
+
+    .ie-fixMinHeight, .main { position: relative; z-index: 1; }
+    .main {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .wrap { width: min(560px, 92vw); margin: 0 auto; }
+    .glass {
+      border-radius: 18px;
+      padding: 28px 26px;
+      background: rgba(20, 25, 35, 0.45);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: center;
+    }
+
+    .glass, .glass * { color: #fff; }
+    h1 { margin: 0 0 10px; font-size: 26px; }
+
+    .info {
+      margin-top: 10px;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      opacity: 0.95;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    a { color: #fff; text-decoration: underline; }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      margin: 16px auto 0;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.95);
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .muted {
+      margin-top: 14px;
+      opacity: 0.8;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  </style>
+
+  <script>
+    var popup = '';
+
+    function openOrig() {
+      if (window.focus) popup.focus();
+      location.href = unescape('$(link-orig-esc)');
+    }
+
+    function openAd() {
+      location.href = unescape('$(link-redirect-esc)');
+    }
+
+    function openAdvert() {
+      if (window.name != 'hotspot_advert') {
+        popup = open('$(link-redirect)', 'hotspot_advert', '');
+        setTimeout(openOrig, 1000);
+        return;
+      }
+      setTimeout(openAd, 1000);
+    }
+  </script>
+</head>
+
+<body onLoad="openAdvert()">
+  <div class="bg" aria-hidden="true">
+    <video autoplay muted playsinline loop preload="auto" poster="img/fallback.jpg" id="bgVideo">
+      <source src="video/bg.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="ie-fixMinHeight">
+    <div class="main">
+      <div class="wrap">
+        <div class="glass">
+          <h1>Advertisement</h1>
+          <div class="spinner" aria-hidden="true"></div>
+
+          <div class="info">
+            Opening advertisement…<br>
+            If nothing happens, open
+            <a href="https://studioimpactindonesia.com/abiel" target="hotspot_advert">advertisement</a>
+            manually.
+          </div>
+
+          <div class="muted">
+            Powered by MikroTik RouterOS<br>
+            Managed by Studio Impact Indonesia
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var v = document.getElementById('bgVideo');
+      if (!v) return;
+      var tryPlay = function () { v.play().catch(function () {}); };
+      document.addEventListener('DOMContentLoaded', tryPlay);
+      window.addEventListener('load', tryPlay);
+    })();
+  </script>
+</body>
+</html>
