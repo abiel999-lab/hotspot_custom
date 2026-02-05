@@ -1,7 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta http-equiv="refresh" content="10">
+  $(if refresh-timeout)
+  <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+  $(endif)
 
 
   <meta charset="utf-8">
@@ -82,16 +84,14 @@
   </style>
 
   <script>
-    $(if advert-pending == 'yes')
-      var popup = '';
-      function focusAdvert() {
-        if (window.focus) popup.focus();
-      }
-      function openAdvert() {
-        popup = open('$(link-advert)', 'hotspot_advert', '');
-        setTimeout("focusAdvert()", 1000);
-      }
-    $(endif)
+    var popup = '';
+    function focusAdvert() {
+      if (window.focus) popup.focus();
+    }
+    function openAdvert() {
+      popup = open('$(link-advert)', 'hotspot_advert', '');
+      setTimeout("focusAdvert()", 1000);
+    }
 
     function openLogout() {
       if (window.name != 'hotspot_status') return true;
@@ -102,9 +102,15 @@
       return false;
     }
   </script>
+
+  $(if advert-pending == 'yes')
+  <script>
+    window.addEventListener('load', openAdvert);
+  </script>
+  $(endif)
 </head>
 
-<body $(if advert-pending == 'yes') onLoad="openAdvert()" $(endif)>
+<body>
   <div class="bg" aria-hidden="true">
     <video autoplay muted playsinline loop preload="auto" poster="img/fallback.jpg" id="bgVideo">
       <source src="video/bg.mp4" type="video/mp4" />
@@ -127,19 +133,6 @@
               <tr><td>Bytes up / down</td><td>$(bytes-in-nice) / $(bytes-out-nice)</td></tr>
 
               <tr><td>Connected</td><td>$(uptime)</td></tr>
-
-              $(if session-time-left)
-                <tr><td>Sisa waktu</td><td><span id="leftText">$(session-time-left)</span></td></tr>
-                <tr><td>Timer</td><td><strong id="leftTimer">$(session-time-left)</strong></td></tr>
-              $(elif remain-time)
-                <tr><td>Sisa waktu</td><td><span id="leftText">$(remain-time)</span></td></tr>
-                <tr><td>Timer</td><td><strong id="leftTimer">$(remain-time)</strong></td></tr>
-              $(elif session-timeout)
-                <tr><td>Sisa waktu</td><td><span id="leftText">$(session-timeout)</span></td></tr>
-                <tr><td>Timer</td><td><strong id="leftTimer">$(session-timeout)</strong></td></tr>
-              $(else)
-                <tr><td>Sisa waktu</td><td><em>Tidak tersedia (RADIUS tidak mengirim)</em></td></tr>
-              $(endif)
 
               $(if blocked == 'yes')
                 <tr>
